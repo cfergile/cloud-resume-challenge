@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <title>Claude Fergile - Cloud Engineer CV</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Claude Fergile</h1>
+            <h2>Cloud Engineer</h2>
+            <p>
+                <i class="fa-solid fa-map-location"></i> Coral Springs, FL | 
+                <i class="fa-solid fa-envelope"></i> <a href="mailto:cfergile1@gmail.com">cfergile1@gmail.com</a> | 
+                <i class="fa-duotone fa-solid fa-phone"></i> 954-684-4585
+            </p>
+            <div class="social-links">
+                <a href="https://linkedin.com/in/claude-fergile/" target="_blank" title="LinkedIn Profile"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/cfergile" target="_blank" title="GitHub Profile"><i class="fa-brands fa-github"></i></a>
+                <a href="https://medium.com/@cfergile1" target="_blank" title="Medium Articles"><i class="fa-brands fa-medium"></i></a>
+            </div>
+            <button id="theme-toggle">Toggle Dark Mode</button>
+            <button id="download-button">Download PDF</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="summary">
+            <h3>Professional Summary</h3>
+            <p>Motivated professional with a solid foundation in cloud computing and hands-on experience with AWS services such as EC2, S3, and Lambda. Skilled in problem-solving and detail-oriented project support, with familiarity in tools like Git and Terraform. Completed relevant courses to deepen knowledge of cloud architecture and security best practices. Passionate about leveraging cloud technology to enhance operational efficiency and support innovative projects. Committed to continuous learning and excited to collaborate in dynamic team environments, ready to tackle challenges and drive impactful cloud solutions.</p>
+        </section>
+
+        <section class="skills">
+            <h3>Skills</h3>
+            <ul>
+                <li><i class="fa-brands fa-aws"></i> AWS</li>
+                <li><i class="fa-brands fa-docker"></i> Docker</li>
+                <li><i class="fa-solid fa-code"></i> Terraform</li>
+                <li><i class="fa-solid fa-code-branch"></i> CI/CD</li>
+                <li><i class="fa-solid fa-server"></i> Serverless Architecture</li>
+                <li><i class="fa-solid fa-shield"></i> Cloud Security</li>
+                <li><i class="fa-solid fa-users"></i> Collaboration</li>
+                <li><i class="fa-solid fa-lightbulb"></i> Problem Solving</li>
+                <li><i class="fa-solid fa-laptop-code"></i> DevOps Practices</li>
+            </ul>
+        </section>
+
+        <section class="certifications">
+            <h3>Certifications</h3>
+            <ul>
+                <li data-badge="https://d1vsrn6pd3r8th.cloudfront.net/aws-certified-cloud-practitioner.png">AWS Certified Cloud Practitioner</li>
+                <li data-badge="https://d1vsrn6pd3r8th.cloudfront.net/aws-certified-solutions-architect-associate.png">AWS Certified Solutions Architect - Associate</li>
+            </ul>
+        </section>
+
+        <section class="projects">
+            <h3>Projects</h3>
+            <ul>
+                <li><a href="https://medium.com/@cfergile1/building-your-dream-deploying-a-bucket-list-tracker-with-aws-amplify-e54eba2b17df" target="_blank">Designing a Bucket List Tracker Application Utilizing AWS Amplify for Cloud Deployment</a></li>
+                <li><a href="https://medium.com/@cfergile1/break-language-barriers-build-your-personal-translator-with-amazon-lex-ba02f8279cca" target="_blank">Developing a Personal Translator Application Using Amazon Lex for Natural Language Processing</a></li>
+                <li><a href="https://awstip.com/bring-your-text-to-life-creating-a-dynamic-voice-narrator-with-amazon-polly-40cfe463ddd2" target="_blank">Creating an Interactive Voice Narrator Application with Amazon Polly for Text-to-Speech Functionality</a></li>
+                <li><a href="https://medium.com/@cfergile1/harnessing-ai-magic-create-your-own-image-label-generator-with-amazon-rekognition-4c32492147a0" target="_blank">Implementing an Image Label Generator Using Amazon Rekognition for Image Analysis</a></li>
+                <li><a href="https://medium.com/@cfergile1/stay-organized-and-boost-productivity-discover-my-daily-task-scheduler-3cac8cb0f937" target="_blank">Building a Daily Task Scheduler Application for Enhanced Personal Productivity</a></li>
+            </ul>
+        </section>
+
+        <section class="education">
+            <h3>Education</h3>
+            <ul>
+                <li>Florida Atlantic University, B.S. in Exercise Science • 2020</li>
+                <li>Broward College, A.A. in Psychology • 2013</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Updated Footer with Social Links and Counter -->
+    <footer>
+        <p>Connect with me on social media!</p>
+        <div class="social-links">
+            <a href="https://linkedin.com/in/claude-fergile/" target="_blank" title="LinkedIn Profile"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://github.com/cfergile" target="_blank" title="GitHub Profile"><i class="fa-brands fa-github"></i></a>
+            <a href="https://medium.com/@cfergile1" target="_blank" title="Medium Articles"><i class="fa-brands fa-medium"></i></a>
+        </div>
+        <p class="counter-number">Views: 0</p>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+            <img id="modal-image" src="" alt="Project Image" style="display: none; max-width: 100%;">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('download-button').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Add content to the PDF
+            doc.setFontSize(20);
+            doc.text("Claude Fergile - Cloud Engineer", 10, 10);
+            doc.setFontSize(12);
+            doc.text("Coral Springs, FL", 10, 20);
+            doc.text("cfergile1@gmail.com", 10, 25);
+            doc.text("954-684-4585", 10, 30);
+            doc.text("Professional Summary:", 10, 40);
+            doc.text("Motivated professional with a solid foundation in cloud computing...", 10, 50); // Summarized for brevity
+            doc.text("Skills:", 10, 70);
+            doc.text("AWS, Docker, Terraform, CI/CD, Serverless Architecture, Cloud Security, Collaboration, Problem Solving, DevOps Practices", 10, 80);
+            doc.text("Certifications:", 10, 100);
+            doc.text("AWS Certified Cloud Practitioner, AWS Certified Solutions Architect - Associate", 10, 110);
+            doc.text("Education:", 10, 130);
+            doc.text("Florida Atlantic University, B.S. in Exercise Science • 2020", 10, 140);
+            doc.text("Broward College, A.A. in Psychology • 2013", 10, 145);
+            
+            // Save the PDF
+            doc.save('Claude_Fergile_CV.pdf');
+        });
+
+        function openModal(project) {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalImage = document.getElementById('modal-image');
+
+            // Populate modal with project details
+            switch (project) {
+                case 'project1':
+                    modalTitle.innerText = 'Daily Task Scheduler Application';
+                    modalDescription.innerText = 'A ride-sharing app that uses CodeCommit, Amplify, Cognito, Lambda, IAM, API Gateway, and DynamoDB.';
+                    modalImage.src = 'path/to/image1.jpg'; // Update with the actual image path
+                    modalImage.style.display = 'block';
+                    break;
+                case 'project2':
+                    modalTitle.innerText = 'Continuous Deployment Game';
+                    modalDescription.innerText = 'A memory card matching game that uses S3 for static website hosting and CodePipeline to set up continuous deployment from GitHub.';
+                    modalImage.src = 'path/to/image2.jpg'; // Update with the actual image path
+                    modalImage.style.display = 'block';
+                    break;
+                case 'project3':
+                    modalTitle.innerText = 'End-to-End AWS Web Application';
+                    modalDescription.innerText = 'A simple math application from scratch that uses Amplify, Lambda, IAM, API Gateway, and DynamoDB.';
+                    modalImage.src = 'path/to/image3.jpg'; // Update with the actual image path
+                    modalImage.style.display = 'block';
+                    break;
+                case 'project4':
+                    modalTitle.innerText = 'Bucket List Tracker';
+                    modalDescription.innerText = 'A bucket list tracker application on AWS Amplify Gen2.';
+                    modalImage.src = 'path/to/image4.jpg'; // Update with the actual image path
+                    modalImage.style.display = 'block';
+                    break;
+                default:
+                    modalTitle.innerText = '';
+                    modalDescription.innerText = '';
+                    modalImage.style.display = 'none';
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Hover effect for certifications
+        document.querySelectorAll('.certifications ul li').forEach(item => {
+            const badge = document.createElement('img');
+            badge.className = 'certification-badge';
+            badge.src = item.getAttribute('data-badge');
+            item.appendChild(badge);
+
+            item.addEventListener('mouseover', function() {
+                badge.style.display = 'block';
+                badge.style.opacity = '1';
+            });
+
+            item.addEventListener('mouseout', function() {
+                badge.style.display = 'none';
+                badge.style.opacity = '0';
+            });
+        });
+    </script>
+
+<script src="script.js"></script>
+</body>
+</html>
