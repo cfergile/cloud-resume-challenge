@@ -9,13 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2  # Use a stable version of the checkout action
-      - uses: jakejarvis/s3-sync-action@v0.5.0  # Use a stable version of the s3-sync-action
+      - uses: actions/checkout@v4  # Updated to v4 for Node.js 20 compatibility
+      - uses: jakejarvis/s3-sync-action@v0.5.0
         with:
-          args: --follow-symlinks --delete  # Removed --acl public-read for private bucket
+          args: --follow-symlinks --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-1'
-          SOURCE_DIR: 'Resume Website' #name of web file
+          SOURCE_DIR: 'Resume Website'
