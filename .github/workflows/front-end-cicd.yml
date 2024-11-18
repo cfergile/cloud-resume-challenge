@@ -13,20 +13,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Debug step to check if secrets are available
-      - name: Print Environment Variables
-        run: |
-          echo "Bucket: ${{ secrets.AWS_S3_BUCKET }}"
-          echo "Access Key: ${{ secrets.AWS_ACCESS_KEY_ID }}"
-          echo "Secret Key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-      
-      # Step 3: Upload to S3
+      # Step 2: Upload to S3
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@v0.5.0
         with:
-          args: --follow-symlinks --delete
+          args: --follow-symlinks --delete s3://${{ secrets.AWS_S3_BUCKET }}  # Ensure correct bucket path here
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SOURCE_DIR: 'Resume Website'
