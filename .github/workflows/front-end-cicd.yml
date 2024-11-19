@@ -3,7 +3,7 @@ name: Upload Website
 on:
   push:
     branches:
-      - main  # Ensure the correct branch (adjust if necessary)
+      - main  # Ensure the correct branch name (adjust if necessary)
 
 jobs:
   deploy:
@@ -11,20 +11,16 @@ jobs:
     steps:
       # Step 1: Checkout the code
       - name: Checkout Code
-        uses: actions/checkout@v4  # Use the latest stable version
-
-      # Debugging step to check AWS_S3_BUCKET value
-      - name: Debug AWS_S3_BUCKET
-        run: echo "AWS_S3_BUCKET is ${{ secrets.AWS_S3_BUCKET }}"
+        uses: actions/checkout@v4  # Use the latest stable version of the checkout action
 
       # Step 2: Upload to S3
       - name: Upload to S3
-        uses: jakejarvis/s3-sync-action@v0.5.0
+        uses: jakejarvis/s3-sync-action@v0.5.0  # Ensure using a stable release version
         with:
-          args: --follow-symlinks --delete ${{ secrets.AWS_S3_BUCKET }}  # Corrected syntax
+          args: --follow-symlinks --delete  # Remove --acl public-read to keep files private
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_REGION: 'us-east-1'   # Adjust region as needed
-          SOURCE_DIR: 'Resume Website'  # Adjust to your source directory
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}  # Your S3 bucket name stored in secrets
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Your AWS Access Key ID stored in secrets
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Your AWS Secret Access Key stored in secrets
+          AWS_REGION: 'us-east-1'  # Optional: Change region as needed (defaults to us-east-1)
+          SOURCE_DIR: 'Resume Website'  # Optional: Adjust to your source directory (defaults to the entire repository)
