@@ -3,24 +3,30 @@ name: Upload Website
 on:
   push:
     branches:
-      - main  # Ensure the correct branch name (adjust if necessary)
+      - main  # Ensure the correct branch name
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the code
+      # Step 1: Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v4  # Use the latest stable version of the checkout action
 
-      # Step 2: Upload to S3
+      # Step 2: Debugging the SOURCE_DIR
+      - name: Debug Source Directory
+        run: |
+          echo "SOURCE_DIR content:"
+          ls -al "Resume Website"
+
+      # Step 3: Upload to S3
       - name: Upload to S3
-        uses: jakejarvis/s3-sync-action@v0.5.0  # Ensure using a stable release version
+        uses: jakejarvis/s3-sync-action@v0.5.0  # Stable release
         with:
-          args: --follow-symlinks --delete ./ ${{ secrets.AWS_S3_BUCKET }}  # Correct the args format
+          args: --follow-symlinks --delete  # Avoid --acl public-read for private files
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}  # Your S3 bucket name stored in secrets
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Your AWS Access Key ID stored in secrets
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Your AWS Secret Access Key stored in secrets
-          AWS_REGION: 'us-east-1'  # Optional: Change region as needed (defaults to us-east-1)
-          SOURCE_DIR: 'Resume Website'  # Optional: Adjust to your source directory (defaults to the entire repository)
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}  # Your bucket name stored in GitHub Secrets
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS Access Key ID
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS Secret Access Key
+          AWS_REGION: 'us-east-1'  # Region matching your bucket
+          SOURCE_DIR: 'Resume Website'  # Your local source directory
