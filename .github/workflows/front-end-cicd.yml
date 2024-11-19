@@ -17,7 +17,7 @@ jobs:
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@v0.5.0  # Ensure using a stable release version
         with:
-          args: --follow-symlinks --delete  # Remove --acl public-read to keep files private
+          args: --follow-symlinks --delete ./ ${{ secrets.AWS_S3_BUCKET }}  # Correct the args format
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}  # Your S3 bucket name stored in secrets
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Your AWS Access Key ID stored in secrets
