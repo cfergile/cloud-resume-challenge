@@ -3,10 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-    <link rel="stylesheet" href="style.css">
     <title>Claude Fergile - Cloud Engineer CV</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        a {
+    color: #003366; /* Use a color from your existing palette */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #0056b3; /* A slightly darker shade for hover */
+}
+        /* General Reset */
+        * {
+            box-sizing: border-box;
+        }
+        .email-link {
+    color: #ffcc00;
+}
+
+.email-link:hover {
+    color: #ffaa00; /* Optional: slightly different shade on hover */
+    text-decoration: underline;
+}
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f8; /* Light background */
+            color: #333; /* Dark text */
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Header Styling */
+        header {
+            text-align: center;
+            background-color: #003366; /* Deep blue */
+            color: #fff; /* White text */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            margin: 5px 0;
+            font-weight: normal;
+        }
+
+        p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        /* Social Links */
+        .social-links a {
+            color: #fff; /* White links */
+            margin: 0 10px;
+            font-size: 1.5em;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+            color: #ffcc00; /* Bright accent color */
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #007bff; /* Bright blue */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Download Button */
+        #download-button {
+            background-color: #28a745; /* Green background */
+        }
+
+        #download-button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        /* Main Content */
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #003366; /* Deep blue */
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        ul li {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #e8f0fe; /* Light blue */
+            border-left: 5px solid #003366;
+            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+
+        ul li:hover {
+            background-color: #d0e2ff;
+            transform: translateX(5px);
+        }
+
+        /* Certification Badge */
+        .certification-badge {
+            display: none;
+            position: absolute;
+            width: 100px;
+            top: -10px;
+            left: 105%;
+            z-index: 1000;
+            transition: opacity 0.3s;
+        }
+        /* Footer Styling */
+        footer {
+            background-color: #003366;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        footer .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        footer .social-links a {
+            color: #fff;
+            margin: 0 15px;
+            font-size: 1.5em;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        footer .social-links a:hover {
+            transform: scale(1.2);
+            color: #ffcc00;
+        }
+
+        footer .counter-number {
+            font-size: 1.2em;
+            margin-top: 15px;
+            color: #ffcc00;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.6); 
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #333;
+            color: #f0f4f8;
+        }
+
+        body.dark-mode header {
+            background-color: #222;
+        }
+
+        body.dark-mode ul li {
+            background-color: #444;
+            border-left: 5px solid #f0f4f8;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #444;
+        }
+
+        body.dark-mode #download-button {
+            background-color: #5cb85c;
+        }
+
+        body.dark-mode #download-button:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            header {
+                padding: 10px;
+            }
+
+            main {
+                padding: 10px;
+            }
+
+            button {
+                padding: 8px 12px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h3 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -15,7 +267,7 @@
             <h2>Cloud Engineer</h2>
             <p>
                 <i class="fa-solid fa-map-location"></i> Coral Springs, FL | 
-                <i class="fa-solid fa-envelope"></i> <a href="mailto:cfergile1@gmail.com">cfergile1@gmail.com</a> | 
+                <i class="fa-solid fa-envelope"></i> <a href="mailto:cfergile1@gmail.com" class="email-link">cfergile1@gmail.com</a> | 
                 <i class="fa-duotone fa-solid fa-phone"></i> 954-684-4585
             </p>
             <div class="social-links">
@@ -77,7 +329,6 @@
         </section>
     </main>
 
-    <!-- Updated Footer with Social Links and Counter -->
     <footer>
         <p>Connect with me on social media!</p>
         <div class="social-links">
@@ -97,63 +348,53 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script>
-        document.getElementById('download-button').addEventListener('click', function() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Add content to the PDF
-            doc.setFontSize(20);
-            doc.text("Claude Fergile - Cloud Engineer", 10, 10);
-            doc.setFontSize(12);
-            doc.text("Coral Springs, FL", 10, 20);
-            doc.text("cfergile1@gmail.com", 10, 25);
-            doc.text("954-684-4585", 10, 30);
-            doc.text("Professional Summary:", 10, 40);
-            doc.text("Motivated professional with a solid foundation in cloud computing...", 10, 50); // Summarized for brevity
-            doc.text("Skills:", 10, 70);
-            doc.text("AWS, Docker, Terraform, CI/CD, Serverless Architecture, Cloud Security, Collaboration, Problem Solving, DevOps Practices", 10, 80);
-            doc.text("Certifications:", 10, 100);
-            doc.text("AWS Certified Cloud Practitioner, AWS Certified Solutions Architect - Associate", 10, 110);
-            doc.text("Education:", 10, 130);
-            doc.text("Florida Atlantic University, B.S. in Exercise Science • 2020", 10, 140);
-            doc.text("Broward College, A.A. in Psychology • 2013", 10, 145);
-            
-            // Save the PDF
-            doc.save('Claude_Fergile_CV.pdf');
+        // Theme Toggle
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
         });
 
+        // PDF Download
+        document.getElementById('download-button').addEventListener('click', function() {
+            const pdfUrl = 'https://d1vsrn6pd3r8th.cloudfront.net/Claude_Fergile_CV.pdf';
+            const link = document.createElement('a');
+            link.href = pdfUrl;
+            link.download = 'Claude_Fergile_CV.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Modal Functionality
         function openModal(project) {
             const modal = document.getElementById('modal');
             const modalTitle = document.getElementById('modal-title');
             const modalDescription = document.getElementById('modal-description');
             const modalImage = document.getElementById('modal-image');
 
-            // Populate modal with project details
             switch (project) {
                 case 'project1':
                     modalTitle.innerText = 'Daily Task Scheduler Application';
                     modalDescription.innerText = 'A ride-sharing app that uses CodeCommit, Amplify, Cognito, Lambda, IAM, API Gateway, and DynamoDB.';
-                    modalImage.src = 'path/to/image1.jpg'; // Update with the actual image path
+                    modalImage.src = 'https://d1vsrn6pd3r8th.cloudfront.net/image1.jpg';
                     modalImage.style.display = 'block';
                     break;
                 case 'project2':
                     modalTitle.innerText = 'Continuous Deployment Game';
                     modalDescription.innerText = 'A memory card matching game that uses S3 for static website hosting and CodePipeline to set up continuous deployment from GitHub.';
-                    modalImage.src = 'path/to/image2.jpg'; // Update with the actual image path
+                    modalImage.src = 'https://d1vsrn6pd3r8th.cloudfront.net/image2.jpg';
                     modalImage.style.display = 'block';
                     break;
                 case 'project3':
                     modalTitle.innerText = 'End-to-End AWS Web Application';
                     modalDescription.innerText = 'A simple math application from scratch that uses Amplify, Lambda, IAM, API Gateway, and DynamoDB.';
-                    modalImage.src = 'path/to/image3.jpg'; // Update with the actual image path
+                    modalImage.src = 'https://d1vsrn6pd3r8th.cloudfront.net/image3.jpg';
                     modalImage.style.display = 'block';
                     break;
                 case 'project4':
                     modalTitle.innerText = 'Bucket List Tracker';
                     modalDescription.innerText = 'A bucket list tracker application on AWS Amplify Gen2.';
-                    modalImage.src = 'path/to/image4.jpg'; // Update with the actual image path
+                    modalImage.src = 'https://d1vsrn6pd3r8th.cloudfront.net/image4.jpg';
                     modalImage.style.display = 'block';
                     break;
                 default:
@@ -169,7 +410,6 @@
             document.getElementById('modal').style.display = 'none';
         }
 
-        // Close modal when clicking outside of it
         window.onclick = function(event) {
             const modal = document.getElementById('modal');
             if (event.target === modal) {
@@ -177,7 +417,7 @@
             }
         };
 
-        // Hover effect for certifications
+        // Certification Badge Hover
         document.querySelectorAll('.certifications ul li').forEach(item => {
             const badge = document.createElement('img');
             badge.className = 'certification-badge';
@@ -194,8 +434,25 @@
                 badge.style.opacity = '0';
             });
         });
-    </script>
 
-<script src="script.js"></script>
+        // Visitor Counter
+        const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
+        const counter = document.querySelector(".counter-number");
+
+        async function updateCounter() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                const count = typeof data === 'number' ? data : data.visitorCount;
+                counter.innerHTML = `Views: ${count}`;
+            } catch (error) {
+                console.error('Error fetching visitor count:', error);
+                counter.innerHTML = 'Unable to fetch visitor count.';
+            }
+        }
+
+        updateCounter();
+    </script>
 </body>
 </html>
