@@ -441,39 +441,83 @@ const counter = document.querySelector(".counter-number");
 
 async function updateCounter() {
     try {
-        console.log('Starting fetch request...');  // Debug log
-        const response = await fetch(apiUrl);
-        console.log('Response received:', response);  // Debug log
+        console.log('Debug: Counter element found:', counter);
+        console.log('Debug: Starting fetch request to:', apiUrl);
+        
+        // Add timeout to fetch request
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
+        const response = await fetch(apiUrl, {
+            signal: controller.signal,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        clearTimeout(timeoutId);
+        
+        console.log('Debug: Response status:', response.status);
+        console.log('Debug: Response headers:', Object.fromEntries(response.headers));
         
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}, StatusText: ${response.statusText}`);
         }
-
-        const data = await response.json();
-        console.log('API Response Data:', data);  // Debug log
-
-        // Check the structure of the response
+        
+        const rawData = await response.text();
+        console.log('Debug: Raw response text:', rawData);
+        
+        let data;
+        try {
+            data = JSON.parse(rawData);
+            console.log('Debug: Parsed JSON data:', data);
+        } catch (parseError) {
+            console.error('Debug: JSON parse error:', parseError);
+            throw new Error(`Failed to parse JSON: ${parseError.message}`);
+        }
+        
         if (data && typeof data.views === 'number') {
-            console.log('Found views count:', data.views);  // Debug log
-            counter.textContent = `Views: ${data.views}`;  // Using textContent instead of innerHTML
+            console.log('Debug: Found views count:', data.views);
+            counter.textContent = `Views: ${data.views}`;
         } else if (data && data.body) {
-            // Handle case where response is wrapped in body property
-            const bodyData = JSON.parse(data.body);
-            console.log('Body data:', bodyData);  // Debug log
-            if (bodyData && typeof bodyData.views === 'number') {
-                counter.textContent = `Views: ${bodyData.views}`;
+            try {
+                const bodyData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
+                console.log('Debug: Parsed body data:', bodyData);
+                
+                if (bodyData && typeof bodyData.views === 'number') {
+                    counter.textContent = `Views: ${bodyData.views}`;
+                } else {
+                    throw new Error('Views count not found in body data');
+                }
+            } catch (bodyError) {
+                console.error('Debug: Body parse error:', bodyError);
+                throw new Error(`Failed to process body data: ${bodyError.message}`);
             }
         } else {
-            console.error('Unexpected data format:', data);
-            counter.textContent = 'Unexpected data format';
+            console.error('Debug: Unexpected data format:', data);
+            throw new Error('Unexpected data format in response');
         }
     } catch (error) {
-        console.error('Error details:', error);  // More detailed error logging
-        counter.textContent = 'Unable to fetch visitor count.';
+        console.error('Debug: Error type:', error.constructor.name);
+        console.error('Debug: Full error:', error);
+        
+        if (error.name === 'AbortError') {
+            counter.textContent = 'Request timed out';
+        } else {
+            counter.textContent = `Error: ${error.message}`;
+        }
+        
+        // Log network state
+        console.log('Debug: Network state:', navigator.onLine ? 'online' : 'offline');
     }
 }
 
-console.log('Counter element:', counter);  // Debug log to verify element selection
-updateCounter();
-
+// Check if counter element exists before running
+if (counter) {
+    console.log('Debug: Counter element found, initializing...');
+    updateCounter();
+} else {
+    console.error('Debug: Counter element not found. Selector: .counter-number');
+}
 
