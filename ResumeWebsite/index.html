@@ -436,23 +436,30 @@ a:hover {
         });
 
         // Visitor Counter
-        const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
-        const counter = document.querySelector(".counter-number");
+        const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/'; // Replace with your actual Lambda URL
+const counter = document.querySelector(".counter-number");
 
-        async function updateCounter() {
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                const data = await response.json();
-                const count = typeof data === 'number' ? data : data.visitorCount;
-                counter.innerHTML = `Views: ${count}`;
-            } catch (error) {
-                console.error('Error fetching visitor count:', error);
-                counter.innerHTML = 'Unable to fetch visitor count.';
-            }
-        }
+async function updateCounter() {
+ try {
+   const response = await fetch(apiUrl);
+   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+   const data = await response.json();
+   console.log('API Response:', data);
 
-        updateCounter();
-    </script>
-</body>
-</html>
+   let count;
+   if (typeof data === 'number') {
+     count = data;
+   } else if (data && typeof data.visitorCount === 'number') {
+     count = data.visitorCount;
+   } else {
+     throw new Error('Unexpected data format');
+   }
+   
+   counter.innerHTML = `Views: ${count}`;
+ } catch (error) {
+   console.error('Error fetching visitor count:', error);
+   counter.innerHTML = 'Unable to fetch visitor count.';
+ }
+}
+
+updateCounter();
