@@ -452,25 +452,18 @@ async function updateCounter() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        let data;
-        try {
-            data = await response.json();
-        } catch (jsonError) {
-            console.error('Error parsing JSON:', jsonError);
-            throw new Error('Failed to parse JSON');
-        }
+        const data = await response.json();
+        console.log('API Response:', data);  // Log the entire API response
 
-        console.log('API Response:', data);
-
-        let count;
         if (data && typeof data.views === 'number') {
-            count = data.views;
+            // Convert the view count to an integer (optional)
+            const count = Math.floor(data.views);  // Round down to an integer
+            console.log('View count:', count);  // Log the view count
+            counter.innerHTML = `Views: ${count}`;
         } else {
             console.error('Unexpected data format:', data);
-            throw new Error('Unexpected data format');
+            counter.innerHTML = 'Unexpected data format';
         }
-
-        counter.innerHTML = `Views: ${count}`;
     } catch (error) {
         console.error('Error fetching visitor count:', error);
         counter.innerHTML = 'Unable to fetch visitor count.';
@@ -478,3 +471,4 @@ async function updateCounter() {
 }
 
 updateCounter();
+
