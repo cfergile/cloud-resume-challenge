@@ -436,7 +436,7 @@ a:hover {
         });
 
         // Visitor Counter
-        const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/'; // Replace with your actual Lambda URL
+        const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
 const counter = document.querySelector(".counter-number");
 
 async function updateCounter() {
@@ -447,10 +447,8 @@ async function updateCounter() {
    console.log('API Response:', data);
 
    let count;
-   if (typeof data === 'number') {
-     count = data;
-   } else if (data && typeof data.visitorCount === 'number') {
-     count = data.visitorCount;
+   if (data && typeof data.views === 'number') {
+     count = data.views;
    } else {
      throw new Error('Unexpected data format');
    }
