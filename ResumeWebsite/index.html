@@ -441,33 +441,39 @@ const counter = document.querySelector(".counter-number");
 
 async function updateCounter() {
     try {
-        const response = await fetch(apiUrl, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
-
+        console.log('Starting fetch request...');  // Debug log
+        const response = await fetch(apiUrl);
+        console.log('Response received:', response);  // Debug log
+        
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log('API Response:', data);
+        console.log('API Response Data:', data);  // Debug log
 
+        // Check the structure of the response
         if (data && typeof data.views === 'number') {
-            console.log('View count:', data.views);
-            counter.innerHTML = `Views: ${data.views}`;
+            console.log('Found views count:', data.views);  // Debug log
+            counter.textContent = `Views: ${data.views}`;  // Using textContent instead of innerHTML
+        } else if (data && data.body) {
+            // Handle case where response is wrapped in body property
+            const bodyData = JSON.parse(data.body);
+            console.log('Body data:', bodyData);  // Debug log
+            if (bodyData && typeof bodyData.views === 'number') {
+                counter.textContent = `Views: ${bodyData.views}`;
+            }
         } else {
             console.error('Unexpected data format:', data);
-            counter.innerHTML = 'Unexpected data format';
+            counter.textContent = 'Unexpected data format';
         }
     } catch (error) {
-        console.error('Error fetching visitor count:', error);
-        counter.innerHTML = 'Unable to fetch visitor count.';
+        console.error('Error details:', error);  // More detailed error logging
+        counter.textContent = 'Unable to fetch visitor count.';
     }
 }
 
+console.log('Counter element:', counter);  // Debug log to verify element selection
 updateCounter();
 
 
