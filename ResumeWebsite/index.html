@@ -441,7 +441,6 @@ const counter = document.querySelector(".counter-number");
 
 async function updateCounter() {
     try {
-        // Await the fetch request and check if the response is successful
         const response = await fetch(apiUrl, {
             headers: {
                 'Content-Type': 'application/json',
@@ -450,17 +449,14 @@ async function updateCounter() {
         });
 
         if (!response.ok) {
-            // Throw error if response status is not OK (200)
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        // Wait for the response body to be parsed as JSON
         const data = await response.json();
-        console.log('API Response:', data);  // Log the entire API response for debugging
+        console.log('API Response:', data);
 
-        // Check if the response has valid data
         if (data && typeof data.views === 'number') {
-            console.log('View count:', data.views);  // Log the view count directly
+            console.log('View count:', data.views);
             counter.innerHTML = `Views: ${data.views}`;
         } else {
             console.error('Unexpected data format:', data);
