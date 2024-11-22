@@ -439,23 +439,34 @@ a:hover {
         const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
 const counter = document.querySelector(".counter-number");
 
-fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-        // Handle the case where views is directly in the data
-        if (data && typeof data.views === 'number') {
-            counter.textContent = `Views: ${data.views}`;
-        }
-        // Handle the case where data is wrapped in a body property
-        else if (data && data.body) {
-            const bodyData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
-            if (bodyData && typeof bodyData.views === 'number') {
-                counter.textContent = `Views: ${bodyData.views}`;
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        counter.textContent = 'Error loading view count';
-    });
+const xhr = new XMLHttpRequest();
+xhr.open('GET', apiUrl);
 
+xhr.onload = function() {
+    if (xhr.status === 200) {
+        try {
+            const data = JSON.parse(xhr.responseText);
+            // Handle direct views property
+            if (data && typeof data.views === 'number') {
+                counter.textContent = `Views: ${data.views}`;
+            }
+            // Handle nested views in body
+            else if (data && data.body) {
+                const bodyData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
+                if (bodyData && typeof bodyData.views === 'number') {
+                    counter.textContent = `Views: ${bodyData.views}`;
+                }
+            }
+        } catch (error) {
+            counter.textContent = 'Error processing view count';
+        }
+    } else {
+        counter.textContent = 'Error loading view count';
+    }
+};
+
+xhr.onerror = function() {
+    counter.textContent = 'Error loading view count';
+};
+
+xhr.send();
