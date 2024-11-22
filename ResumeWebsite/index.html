@@ -10,24 +10,24 @@
         a {
     color: #003366; /* Use a color from your existing palette */
     text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-    color: #0056b3; /* A slightly darker shade for hover */
-}
-        /* General Reset */
-        * {
-            box-sizing: border-box;
         }
-        .email-link {
-    color: #ffcc00;
-}
 
-.email-link:hover {
-    color: #ffaa00; /* Optional: slightly different shade on hover */
-    text-decoration: underline;
-}
+        a:hover {
+            text-decoration: underline;
+            color: #0056b3; /* A slightly darker shade for hover */
+        }
+                /* General Reset */
+                * {
+                    box-sizing: border-box;
+                }
+                .email-link {
+            color: #ffcc00;
+        }
+
+        .email-link:hover {
+            color: #ffaa00; /* Optional: slightly different shade on hover */
+            text-decoration: underline;
+        }
 
         /* Body Styling */
         body {
@@ -437,21 +437,24 @@ a:hover {
 
         // Visitor Counter
         const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
-const counter = document.querySelector(".counter-number");
+        const counter = document.querySelector(".counter-number");
 
-async function updateCounter() {
-try {
-  const response = await fetch(apiUrl);
-  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-  const data = await response.json();
-  console.log('API Response:', data);
+        async function updateCounter() {
+        try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        console.log('API Response:', data);
 
-  const count = data?.views ?? 0;
-  counter.textContent = `Views: ${count}`;
-} catch (error) {
-  console.error('Error fetching visitor count:', error);
-  counter.textContent = 'Unable to fetch visitor count.';
-}
-}
+        const count = data?.views ?? 0;
+        counter.textContent = `Views: ${count}`;
+        } catch (error) {
+        console.error('Error fetching visitor count:', error);
+        counter.textContent = 'Unable to fetch visitor count.';
+        }
+        }
 
-updateCounter();
+        updateCounter();
+    </script>
+</body>
+</html>
