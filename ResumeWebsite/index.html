@@ -436,66 +436,26 @@ a:hover {
         });
 
         // Visitor Counter
-        document.addEventListener('DOMContentLoaded', function() {
-    const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
-    const counter = document.querySelector(".counter-number");
-    
-    function setCounterText(text) {
-        if (counter) {
-            counter.textContent = text;
-        } else {
-            console.error('Counter element not found');
+        const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
+const counter = document.querySelector(".counter-number");
+
+fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        // Handle the case where views is directly in the data
+        if (data && typeof data.views === 'number') {
+            counter.textContent = `Views: ${data.views}`;
         }
-    }
-
-    function handleError(error) {
-        console.error('Counter error:', error);
-        setCounterText('Error loading count');
-    }
-
-    // Simple XHR request instead of fetch
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', apiUrl, true);
-    
-    xhr.onload = function() {
-        try {
-            if (xhr.status === 200) {
-                const data = JSON.parse(xhr.responseText);
-                if (data && typeof data.views === 'number') {
-                    setCounterText(`Views: ${data.views}`);
-                } else if (data && data.body) {
-                    const bodyData = typeof data.body === 'string' 
-                        ? JSON.parse(data.body) 
-                        : data.body;
-                    if (bodyData && typeof bodyData.views === 'number') {
-                        setCounterText(`Views: ${bodyData.views}`);
-                    } else {
-                        handleError('Invalid response format');
-                    }
-                } else {
-                    handleError('Invalid response format');
-                }
-            } else {
-                handleError(`Server returned ${xhr.status}`);
+        // Handle the case where data is wrapped in a body property
+        else if (data && data.body) {
+            const bodyData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
+            if (bodyData && typeof bodyData.views === 'number') {
+                counter.textContent = `Views: ${bodyData.views}`;
             }
-        } catch (error) {
-            handleError(error);
         }
-    };
-
-    xhr.onerror = function() {
-        handleError('Network error');
-    };
-
-    xhr.timeout = 5000; // 5 second timeout
-    xhr.ontimeout = function() {
-        handleError('Request timed out');
-    };
-
-    try {
-        xhr.send();
-    } catch (error) {
-        handleError(error);
-    }
-});
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        counter.textContent = 'Error loading view count';
+    });
 
