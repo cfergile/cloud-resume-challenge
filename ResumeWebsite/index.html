@@ -436,88 +436,66 @@ a:hover {
         });
 
         // Visitor Counter
-        const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
-const counter = document.querySelector(".counter-number");
-
-async function updateCounter() {
-    try {
-        console.log('Debug: Counter element found:', counter);
-        console.log('Debug: Starting fetch request to:', apiUrl);
-        
-        // Add timeout to fetch request
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-        
-        const response = await fetch(apiUrl, {
-            signal: controller.signal,
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        
-        clearTimeout(timeoutId);
-        
-        console.log('Debug: Response status:', response.status);
-        console.log('Debug: Response headers:', Object.fromEntries(response.headers));
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}, StatusText: ${response.statusText}`);
-        }
-        
-        const rawData = await response.text();
-        console.log('Debug: Raw response text:', rawData);
-        
-        let data;
-        try {
-            data = JSON.parse(rawData);
-            console.log('Debug: Parsed JSON data:', data);
-        } catch (parseError) {
-            console.error('Debug: JSON parse error:', parseError);
-            throw new Error(`Failed to parse JSON: ${parseError.message}`);
-        }
-        
-        if (data && typeof data.views === 'number') {
-            console.log('Debug: Found views count:', data.views);
-            counter.textContent = `Views: ${data.views}`;
-        } else if (data && data.body) {
-            try {
-                const bodyData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
-                console.log('Debug: Parsed body data:', bodyData);
-                
-                if (bodyData && typeof bodyData.views === 'number') {
-                    counter.textContent = `Views: ${bodyData.views}`;
-                } else {
-                    throw new Error('Views count not found in body data');
-                }
-            } catch (bodyError) {
-                console.error('Debug: Body parse error:', bodyError);
-                throw new Error(`Failed to process body data: ${bodyError.message}`);
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+    const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
+    const counter = document.querySelector(".counter-number");
+    
+    function setCounterText(text) {
+        if (counter) {
+            counter.textContent = text;
         } else {
-            console.error('Debug: Unexpected data format:', data);
-            throw new Error('Unexpected data format in response');
+            console.error('Counter element not found');
         }
-    } catch (error) {
-        console.error('Debug: Error type:', error.constructor.name);
-        console.error('Debug: Full error:', error);
-        
-        if (error.name === 'AbortError') {
-            counter.textContent = 'Request timed out';
-        } else {
-            counter.textContent = `Error: ${error.message}`;
-        }
-        
-        // Log network state
-        console.log('Debug: Network state:', navigator.onLine ? 'online' : 'offline');
     }
-}
 
-// Check if counter element exists before running
-if (counter) {
-    console.log('Debug: Counter element found, initializing...');
-    updateCounter();
-} else {
-    console.error('Debug: Counter element not found. Selector: .counter-number');
-}
+    function handleError(error) {
+        console.error('Counter error:', error);
+        setCounterText('Error loading count');
+    }
+
+    // Simple XHR request instead of fetch
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', apiUrl, true);
+    
+    xhr.onload = function() {
+        try {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+                if (data && typeof data.views === 'number') {
+                    setCounterText(`Views: ${data.views}`);
+                } else if (data && data.body) {
+                    const bodyData = typeof data.body === 'string' 
+                        ? JSON.parse(data.body) 
+                        : data.body;
+                    if (bodyData && typeof bodyData.views === 'number') {
+                        setCounterText(`Views: ${bodyData.views}`);
+                    } else {
+                        handleError('Invalid response format');
+                    }
+                } else {
+                    handleError('Invalid response format');
+                }
+            } else {
+                handleError(`Server returned ${xhr.status}`);
+            }
+        } catch (error) {
+            handleError(error);
+        }
+    };
+
+    xhr.onerror = function() {
+        handleError('Network error');
+    };
+
+    xhr.timeout = 5000; // 5 second timeout
+    xhr.ontimeout = function() {
+        handleError('Request timed out');
+    };
+
+    try {
+        xhr.send();
+    } catch (error) {
+        handleError(error);
+    }
+});
 
