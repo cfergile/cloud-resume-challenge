@@ -439,34 +439,30 @@ a:hover {
         const apiUrl = 'https://vltjoq5hvw2zalr4pt454vct7u0yvels.lambda-url.us-east-1.on.aws/';
 const counter = document.querySelector(".counter-number");
 
-const xhr = new XMLHttpRequest();
-xhr.open('GET', apiUrl);
+async function updateCounter() {
+ try {
+   const response = await fetch(apiUrl, {
+     headers: {
+       'Content-Type': 'application/json',
+       'Accept': 'application/json'
+     }
+   });
+   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+   const data = await response.json();
+   console.log('API Response:', data);
 
-xhr.onload = function() {
-    if (xhr.status === 200) {
-        try {
-            const data = JSON.parse(xhr.responseText);
-            // Handle direct views property
-            if (data && typeof data.views === 'number') {
-                counter.textContent = `Views: ${data.views}`;
-            }
-            // Handle nested views in body
-            else if (data && data.body) {
-                const bodyData = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
-                if (bodyData && typeof bodyData.views === 'number') {
-                    counter.textContent = `Views: ${bodyData.views}`;
-                }
-            }
-        } catch (error) {
-            counter.textContent = 'Error processing view count';
-        }
-    } else {
-        counter.textContent = 'Error loading view count';
-    }
-};
+   let count;
+   if (data && typeof data.views === 'number') {
+     count = data.views;
+   } else {
+     throw new Error('Unexpected data format');
+   }
+   
+   counter.innerHTML = `Views: ${count}`;
+ } catch (error) {
+   console.error('Error fetching visitor count:', error);
+   counter.innerHTML = 'Unable to fetch visitor count.';
+ }
+}
 
-xhr.onerror = function() {
-    counter.textContent = 'Error loading view count';
-};
-
-xhr.send();
+updateCounter();
