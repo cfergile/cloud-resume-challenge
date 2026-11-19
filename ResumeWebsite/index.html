@@ -99,6 +99,9 @@
     .cred p { margin: 0; }
     .cred .name { font-weight: 600; font-size: 15px; }
     .cred .issuer { margin-top: 2px; font-size: 13px; color: var(--muted); }
+    a.cred-link { color: inherit; text-decoration: none; transition: border-color .15s; }
+    a.cred-link:hover { border-color: var(--accent); color: inherit; }
+    a.cred-link .verify { display: block; margin-top: 2px; color: var(--accent); font-weight: 500; }
 
     footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 28px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
     footer p { margin: 0; }
@@ -133,6 +136,7 @@
       .projects { grid-template-columns: 1fr 1fr; gap: 10px; }
       .tags li { border: 1px solid #BBB; padding: 2px 8px; }
       a { color: #000; text-decoration: none; }
+      a.cred-link .verify { display: none; }
       .summary { font-size: 11pt; }
       body { font-size: 11pt; }
     }
@@ -254,14 +258,14 @@
     <section class="split" aria-labelledby="cred-h">
       <h2 id="cred-h" class="section-label">Certifications &amp; education</h2>
       <div class="creds">
-        <div class="cred">
+        <a class="cred cred-link" href="https://www.credly.com/badges/15b6a59e-7de6-4164-9c81-d9160bb37cd2/public_url" target="_blank" rel="noopener" aria-label="Verify AWS Solutions Architect – Associate on Credly (opens in a new tab)">
           <img src="/aws-certified-solutions-architect-associate.png" alt="AWS Certified Solutions Architect – Associate badge" width="56" height="56">
-          <div><p class="name">AWS Solutions Architect – Associate</p><p class="issuer">Amazon Web Services</p></div>
-        </div>
-        <div class="cred">
+          <div><p class="name">AWS Solutions Architect – Associate</p><p class="issuer">Amazon Web Services<span class="verify">Verify on Credly ↗</span></p></div>
+        </a>
+        <a class="cred cred-link" href="https://www.credly.com/badges/be41b1cf-6a04-4cf2-9dc1-ad8f772bb105/public_url" target="_blank" rel="noopener" aria-label="Verify AWS Cloud Practitioner on Credly (opens in a new tab)">
           <img src="/aws-certified-cloud-practitioner.png" alt="AWS Certified Cloud Practitioner badge" width="56" height="56">
-          <div><p class="name">AWS Cloud Practitioner</p><p class="issuer">Amazon Web Services</p></div>
-        </div>
+          <div><p class="name">AWS Cloud Practitioner</p><p class="issuer">Amazon Web Services<span class="verify">Verify on Credly ↗</span></p></div>
+        </a>
         <div class="cred">
           <div><p class="name">B.S. Exercise Science</p><p class="issuer">Florida Atlantic University · 2020</p></div>
         </div>
